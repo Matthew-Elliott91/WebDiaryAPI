@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebDiaryAPI.Data;
 using WebDiaryAPI.Models;
 
@@ -17,9 +18,31 @@ namespace WebDiaryAPI.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<DiaryEntry> GetDiaryEntries()
+        public async Task<ActionResult<IEnumerable<DiaryEntry>>> GetDiaryEntries()
         {
-            return _context.DiaryEntries;
+            return await _context.DiaryEntries.ToListAsync();
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<DiaryEntry>> GetDiaryEntry(int id)
+        {
+            DiaryEntry diaryEntry = await _context.DiaryEntries.FindAsync(id);
+
+            if (diaryEntry == null)
+            {
+                return NotFound();
+            }
+
+            return diaryEntry;
+        }
+
+
+        //Another method that is synchronous
+
+
+        //Another method that is a synchronous
+
+
+        //Another method that is synchronous
     }
 }
